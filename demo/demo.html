@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+        <div class="App">
+            <svg width="450" height="500"></svg>
+        </div>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script>
+
+    var marge = {top:0,bottom:60,left:0,right:60}//设置边距
+    var dataset = [ 11, 250 , 210 , 170 , 130 , 90 ];
+
+    const scaleLinear = d3.scaleLinear()
+            .domain([0, d3.max(dataset)])
+            .range([0, 400]);
+
+    const svg = d3.select('svg')
+    const width = svg.attr('width');
+    const height = svg.attr('height')
+
+    const g = svg.append('g')
+              .attr('transform',`translate(${marge.top}, ${marge.left})`);
+
+              
+    const rectHeight = 30;//设置每一个矩形的高度
+    g.selectAll('rect')
+      .data(dataset)
+      .enter()
+      .append('rect')
+      .attr('x', 20)
+      .attr('y', (d, i)=>{
+        return i*rectHeight;
+      })
+      .attr('width', (d, i)=>{
+        return scaleLinear(d);
+      })
+      .attr('height', rectHeight - 5)
+      .attr('fill', 'blue');
+
+      const xAxis = d3.axisBottom(scaleLinear)
+            .ticks(7)
+      
+      g.append('g')
+        .attr('transform', `translate(20, ${dataset.length*rectHeight})`)
+        .call(xAxis);
+
+    </script>
+</body>
+</html>
